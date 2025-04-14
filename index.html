@@ -15,6 +15,7 @@
       overflow-x: hidden;
     }
 
+
     .app {
       display: flex;
       flex-direction: column;
@@ -49,7 +50,7 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      background: url('https://i.imgur.com/k7Nwgcg.png') center/cover no-repeat;
+      background: url('https://imgur.com/pPJemTN') center/cover no-repeat;
       position: relative;
     }
 
@@ -88,12 +89,15 @@
       text-align: center;
     }
 
-    .dialogue img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      transition: transform 0.4s ease;
-    }
+   .dialogue img {
+  max-width: 100%;
+  height: auto;
+  max-height: 250px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: transform 0.4s ease;
+}
+
 
     .dialogue p {
       font-size: 1.1em;
@@ -152,26 +156,27 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const stages = [
-      {
+            {
         image: 'https://i.imgur.com/LmAX6OH.png',
-        music: 'https://limewire.com/d/1Ds2A#XKDi3OGcSr',
+        music: 'https://cdn.pixabay.com/download/audio/2023/10/26/audio_6c16fd3896.mp3?filename=nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan-327395.mp3',
         message: 'Ngày 15/04/2000, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
       },
       {
         image: 'https://i.imgur.com/FTdLc70.png',
-        music: 'https://pixabay.com/music/niem-tin-chien-thang-my-tam-327398/',
+        music: 'https://cdn.pixabay.com/download/audio/2023/10/26/audio_3f7e724f3c.mp3?filename=niem-tin-chien-thang-my-tam-327398.mp3',
         message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
       },
       {
         image: 'https://i.imgur.com/RK4uZBs.png',
-        music: 'https://pixabay.com/music/den-ft-linh-cao-dua-nhau-di-tron-327396/',
+        music: 'https://cdn.pixabay.com/download/audio/2023/10/26/audio_00c577a637.mp3?filename=den-ft-linh-cao-dua-nhau-di-tron-327396.mp3',
         message: 'Khuyết điểm của bé nhiều như sao trên trời ý, nhưng nụ cười của bé thì như mặt trời. Vì khi mặt trời xuất hiện cũng là lúc những ngôi sao biến mất'
       },
       {
         image: 'https://i.imgur.com/Wv3a0Lz.png',
-        music: 'https://pixabay.com/music/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan-327395/',
+        music: 'https://cdn.pixabay.com/download/audio/2023/10/26/audio_53a35baad2.mp3?filename=noiaycontimve-hoquanghieu-327397.mp3',
         message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
       }
+
     ];
 
     let currentStage = 0;
