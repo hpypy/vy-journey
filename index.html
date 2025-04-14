@@ -1,204 +1,33 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chúc Mừng Sinh Nhật Hà Vy! 🌸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Press Start 2P', cursive;
-      background: url('https://i.imgur.com/cherry-blossom-bg-pixel.jpg') repeat;
-      background-size: 200px;
-      overflow-x: hidden;
-      color: #333;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
+        <footer class="page-footer font-small pt-4">
+            <div class="container">
+               <?php the_field("footer_content","option");?>
+            </div>
+            <div class="footer-copyright text-center py-3">Copyright © 2024 CakeoTV All rights reserved.</div>
+        </footer><!--]-->
+    </div>
+    <div id="teleports"></div>
+	<div class="float_bottom">
+<?php while( have_rows("banner_bottom","option") ): the_row();?>
+	<a href="<?php the_sub_field("link");?>"><img src="<?php the_sub_field("img");?>"></a>
+<?php endwhile;?>
+	</div>
+	<?php wp_footer();?>
 
-    h1 {
-      color: #ff3399;
-      font-size: 24px;
-      text-shadow: 2px 2px #000;
-      margin-bottom: 20px;
-      animation: glow 2s infinite alternate;
-    }
-
-    @keyframes glow {
-      0% { text-shadow: 2px 2px #000; }
-      100% { text-shadow: 2px 2px 5px #ff6699; }
-    }
-
-    .section {
-      margin: 40px 0;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 4px solid #000;
-      border-radius: 10px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 4px 4px #000;
-      position: relative;
-    }
-
-    .section img {
-      max-width: 100%;
-      height: auto;
-      border: 2px solid #000;
-      border-radius: 5px;
-    }
-
-    .section p {
-      font-size: 14px;
-      margin: 10px 0;
-      text-shadow: 1px 1px #fff;
-    }
-
-    .petal {
-      position: fixed;
-      width: 15px;
-      height: 15px;
-      background: url('https://opengameart.org/sites/default/files/cherry-blossom-pixel.png');
-      background-size: cover;
-      animation: fall 6s linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-100vh); }
-      100% { transform: translateY(100vh); }
-    }
-
-    .spark {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: url('https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/4c9e7d2f8b1a.png');
-      background-size: cover;
-    }
-
-    @keyframes sparkA {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(100px, 100px) scale(0); opacity: 0; }
-    }
-
-    @keyframes sparkB {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(-100px, -100px) scale(0); opacity: 0; }
-    }
-
-    @keyframes heartA {
-      0% { transform: translate(0, 0); opacity: 1; }
-      100% { transform: translate(25px, -200px); opacity: 0; }
-    }
-
-    @keyframes heartB {
-      0% { transform: translate(0, 0); opacity: 1; }
-      100% { transform: translate(-25px, -250px); opacity: 0; }
-    }
-
-    #secret-wish-btn {
-      padding: 10px 20px;
-      font-size: 12px;
-      background: #ff3399;
-      color: white;
-      border: 3px solid #000;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: transform 0.1s;
-      font-family: 'Press Start 2P', cursive;
-      margin-top: 10px;
-    }
-
-    #secret-wish-btn:hover {
-      transform: scale(1.1);
-    }
-  </style>
-</head>
-<body>
-  <h1>Hành Trình Của Hà Vy</h1>
-
-  <div class="section">
-    <img src="https://drive.google.com/uc?id=1U8kti6LyLQu5NJhM91WpvoH3SaDsy_7v&export=download" alt="Chibi Vy">
-    <p>Chào Vy đến với hành trình chibi của em! Đây là món quà sinh nhật từ Hoàng, kể về những khoảnh khắc đẹp nhất của em. 🌸</p>
-  </div>
-
-  <div class="section">
-    <img src="https://drive.google.com/uc?id=1MM0VLhn-9CAuetWf-kEsw82KxwY9ZHU-&export=download" alt="Mẹ Tuyến">
-    <p>Ngày 15/04/200X, một ngôi sao chibi tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để anh được gặp em! 🌸</p>
-    <audio controls>
-      <source src="https://drive.google.com/uc?id=19iHTgdILghOfa2UybuK-epWrMK_IEGbu&export=download" type="audio/mpeg">
-      Trình duyệt không hỗ trợ phát nhạc.
-    </audio>
-  </div>
-
-  <div class="section">
-    <img src="https://drive.google.com/uc?id=13CrP09MM0WSJz4DGykGW3tUQQ3nsrNBa&export=download" alt="Vy thiếu nữ">
-    <p>Chibi Vy thời thiếu nữ, tung tăng khắp nơi, nụ cười sáng cả thế giới. Mỗi bước chân em là một phép màu dẫn đến anh.</p>
-    <audio controls>
-      <source src="https://drive.google.com/uc?id=1n8ZEFk9pypBj_QUkTnU7c5q_GjLl6NN1&export=download" type="audio/mpeg">
-      Trình duyệt không hỗ trợ phát nhạc.
-    </audio>
-  </div>
-
-  <div class="section">
-    <img src="https://drive.google.com/uc?id=1AfCtGDH3BNuMqJ1nHu-vTgZgrxHxFFgs&export=download" alt="Vy tốt nghiệp">
-    <p>Cô gái chibi Hà Vy tốt nghiệp đại học, xinh đẹp và rực rỡ. Em là niềm tự hào của mẹ Tuyến và là ánh sáng của anh.</p>
-    <audio controls>
-      <source src="https://drive.google.com/uc?id=1oN3CdmAxoEGxzWzE-0qO9u5wqoiaRdlO&export=download" type="audio/mpeg">
-      Trình duyệt không hỗ trợ phát nhạc.
-    </audio>
-  </div>
-
-  <div class="section" id="final-section">
-    <img src="https://drive.google.com/uc?id=1y60w5N1a4mAnGkSduIWa_GI5oVUfRnx5&export=download" alt="Vy và Hoàng">
-    <p>Ngày hôm nay là một ngày rất quan trọng, Vy ơi! Sinh nhật em, giữa rừng hoa anh đào, Hoàng hứa sẽ luôn bên em. Anh yêu em, mãi mãi! 🌸</p>
-    <audio controls>
-      <source src="https://drive.google.com/uc?id=1afMDeS7MQMsDYPLeth5bNf2Skk_a1WcU&export=download" type="audio/mpeg">
-      Trình duyệt không hỗ trợ phát nhạc.
-    </audio>
-    <button id="secret-wish-btn">Lời Chúc Bí Mật</button>
-  </div>
-
-  <script>
-    // Tăng cánh hoa rơi
-    for (let i = 0; i < 30; i++) {
-      let petal = document.createElement('div');
-      petal.className = 'petal';
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDelay = Math.random() * 5 + 's';
-      document.body.appendChild(petal);
-    }
-
-    // Pháo hoa và trái tim khi nhấn nút "Lời chúc bí mật"
-    document.getElementById('secret-wish-btn').addEventListener('click', function() {
-      alert('Vy ơi, em là món quà quý nhất của anh. Chúc em sinh nhật vui vẻ, mãi hạnh phúc bên Hoàng nhé! ❤️');
-
-      // Pháo hoa
-      for (let i = 0; i < 15; i++) {
-        let spark = document.createElement('div');
-        spark.className = 'spark';
-        spark.style.left = '50%';
-        spark.style.top = '50%';
-        spark.style.animation = 'spark' + (i % 2 ? 'A' : 'B') + ' 1.5s ease-out';
-        document.getElementById('final-section').appendChild(spark);
-        setTimeout(() => spark.remove(), 1500);
-      }
-
-      // Trái tim
-      for (let i = 0; i < 5; i++) {
-        let heart = document.createElement('div');
-        heart.innerHTML = '❤️';
-        heart.style.position = 'absolute';
-        heart.style.left = '50%';
-        heart.style.top = '50%';
-        heart.style.fontSize = '20px';
-        heart.style.animation = 'heart' + (i % 2 ? 'A' : 'B') + ' 2s ease-out';
-        document.getElementById('final-section').appendChild(heart);
-        setTimeout(() => heart.remove(), 2000);
-      }
+<script>
+jQuery(document).ready(function($) {
+    $('.button-toggle').click(function() {
+        $('.nav_menu').toggleClass('active');
+        $('body').append('<div class="overlay"></div>');
     });
-  </script>
+    
+    $(document).on('click', '.overlay', function() {
+        $('.nav_menu').removeClass('active');
+        $('.overlay').remove();
+    });
+});
+</script>
+
+
 </body>
+
 </html>
