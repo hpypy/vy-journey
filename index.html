@@ -8,224 +8,226 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      min-height: 100vh;
       margin: 0;
-      background: linear-gradient(to bottom, #ffe6f0, #fff);
+      padding: 0;
+      background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+      font-family: 'Arial', sans-serif;
       overflow-x: hidden;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
     }
 
     h1 {
       font-family: 'Dancing Script', cursive;
-      font-size: 2.8em;
-      color: #ff6699;
-      margin: 20px 0;
+      font-size: 3em;
+      color: #ff5e99;
+      margin-bottom: 30px;
+      animation: fadeInDown 1s ease forwards;
     }
 
-    .container {
-      text-align: center;
-    }
-
-    .path {
+    .stage-container {
       position: relative;
-      width: 80vw;
+      width: 100%;
       max-width: 600px;
-      height: 80px;
-      background: linear-gradient(to right, #f0f0f0, #e0e0e0);
-      border: 2px solid #ff99cc;
-      border-radius: 10px;
-      margin: 20px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: fadeInUp 1s ease forwards;
     }
 
-    .character {
+    .character-area {
+      height: 250px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: url('https://i.imgur.com/k7Nwgcg.png') center/cover no-repeat;
+      position: relative;
+    }
+
+    .character-area img {
+      height: 160px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .confetti {
       position: absolute;
-      top: 10px;
-      left: 0;
-      width: 60px;
-      height: 60px;
-      background-image: url('https://i.imgur.com/pPJemTN.png');
-      background-size: cover;
-      transition: transform 0.2s;
-    }
-
-    .stage {
-      position: absolute;
-      top: 50%;
-      width: 15px;
-      height: 15px;
-      background-color: #ff6699;
-      border-radius: 50%;
-      transform: translateY(-50%);
-    }
-
-    .stage[data-stage="1"] { left: 25%; }
-    .stage[data-stage="2"] { left: 45%; }
-    .stage[data-stage="3"] { left: 65%; }
-    .stage[data-stage="4"] { left: 85%; }
-
-    #move-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #ff6699;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    #move-btn:hover {
-      background-color: #ff3366;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      pointer-events: none;
+      z-index: 10;
     }
 
-    .modal-content {
-      background: white;
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .dialogue {
       padding: 20px;
-      border-radius: 10px;
       text-align: center;
-      max-width: 400px;
-      position: relative;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .modal-content img {
+    .dialogue img {
       max-width: 100%;
-      height: auto;
-      border-radius: 5px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: transform 0.4s ease;
     }
 
-    #memory-message {
+    .dialogue p {
+      font-size: 1.1em;
+      color: #333;
       font-family: 'Dancing Script', cursive;
-      color: #333;
-      font-size: 1.2em;
-      margin: 10px 0;
     }
 
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 24px;
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff69b4;
+      color: white;
       cursor: pointer;
-      color: #333;
+      transition: background 0.3s ease, transform 0.3s;
+    }
+
+    .controls button:hover {
+      background-color: #ff3399;
+      transform: scale(1.05);
+    }
+
+    audio {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app">
     <h1>Hành Trình Của Vy</h1>
-    <div class="path">
-      <div id="character" class="character"></div>
-      <div class="stage" data-stage="1"></div>
-      <div class="stage" data-stage="2"></div>
-      <div class="stage" data-stage="3"></div>
-      <div class="stage" data-stage="4"></div>
+    <div class="stage-container">
+      <div class="character-area">
+        <img id="character-img" src="https://i.imgur.com/pPJemTN.png" alt="Vy chibi">
+        <canvas class="confetti" id="confetti-canvas"></canvas>
+      </div>
+      <div class="dialogue">
+        <img id="stage-img" src="" alt="Kỷ niệm">
+        <p id="stage-text"></p>
+        <audio id="stage-audio" controls></audio>
+      </div>
     </div>
-    <button id="move-btn">Bước Tiếp Theo</button>
-  </div>
-
-  <div id="memory-modal" class="modal">
-    <div class="modal-content">
-      <span id="close-modal" class="close">&times;</span>
-      <img id="memory-image" src="" alt="Kỷ niệm">
-      <p id="memory-message"></p>
-      <audio id="memory-audio" controls></audio>
+    <div class="controls">
+      <button id="prev-btn">⬅️ Trước</button>
+      <button id="next-btn">Tiếp ➡️</button>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const stages = [
       {
-        position: '25%',
         image: 'https://i.imgur.com/LmAX6OH.png',
-         music: '/mnt/data/NoiAyConTimVe-HoQuangHieu.mp3',
-        message: 'Ngày 15/04/200X, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
+        music: 'https://pixabay.com/music/noiaycontimve-hoquanghieu-327397/',
+        message: 'Ngày 15/04/2000, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
       },
       {
-        position: '45%',
         image: 'https://i.imgur.com/FTdLc70.png',
-       music: '/mnt/data/niem-tin-chien-thang-my-tam.mp3',
+        music: 'https://pixabay.com/music/niem-tin-chien-thang-my-tam-327398/',
         message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
       },
       {
-        position: '65%',
         image: 'https://i.imgur.com/RK4uZBs.png',
-         music: '/mnt/data/den-ft-linh-cao-dua-nhau-di-tron.mp3',
-        
-        message: 'Khuyết điểm của bé nhiều như sao trên trời dị, nhưng nụ cười của bé thì lại như mặt trời. Và khi mặt trời xuất hiện thì những ngôi sao kia cũng biến mất'
+        music: 'https://pixabay.com/music/den-ft-linh-cao-dua-nhau-di-tron-327396/',
+        message: 'Khuyết điểm của bé nhiều như sao trên trời ý, nhưng nụ cười của bé thì như mặt trời. Vì khi mặt trời xuất hiện cũng là lúc những ngôi sao biến mất'
       },
       {
-        position: '85%',
         image: 'https://i.imgur.com/Wv3a0Lz.png',
-        music: '/mnt/data/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan.mp3',
-       
-        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Chúc mừng sinh nhật xíu xíu của anh'
+        music: 'https://pixabay.com/music/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan-327395/',
+        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
       }
     ];
 
     let currentStage = 0;
-    const character = document.getElementById('character');
-    const moveBtn = document.getElementById('move-btn');
-    const modal = document.getElementById('memory-modal');
-    const memoryImage = document.getElementById('memory-image');
-    const memoryMessage = document.getElementById('memory-message');
-    const memoryAudio = document.getElementById('memory-audio');
-    const closeModal = document.getElementById('close-modal');
+    const stageImg = document.getElementById('stage-img');
+    const stageText = document.getElementById('stage-text');
+    const stageAudio = document.getElementById('stage-audio');
+    const confettiCanvas = document.getElementById('confetti-canvas');
 
-    function showStage(index) {
+    function renderStage(index) {
       const stage = stages[index];
-      anime({
-        targets: character,
-        left: stage.position,
-        duration: 1000,
-        easing: 'easeInOutQuad',
-        complete: () => {
-          memoryImage.src = stage.image;
-          memoryMessage.textContent = stage.message;
-          memoryAudio.src = stage.music;
-          modal.style.display = 'flex';
-          memoryAudio.play();
-        }
-      });
+      stageImg.src = stage.image;
+      stageText.textContent = '';
+      stageAudio.src = stage.music;
+      stageAudio.play();
+      typeEffect(stage.message);
+      if (index === stages.length - 1) {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.6 },
+          ticks: 200,
+          scalar: 1.2,
+          disableForReducedMotion: true,
+        });
+      }
     }
 
-    moveBtn.addEventListener('click', () => {
-      if (currentStage < stages.length) {
-        showStage(currentStage);
-        currentStage++;
-        if (currentStage === stages.length) {
-          moveBtn.textContent = '🎉 Chúc Mừng Sinh Nhật Vy!';
-          moveBtn.disabled = true;
+    function typeEffect(text) {
+      let i = 0;
+      const speed = 40;
+      stageText.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          stageText.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
         }
+      }
+      type();
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (currentStage < stages.length - 1) {
+        currentStage++;
+        renderStage(currentStage);
       }
     });
 
-    closeModal.addEventListener('click', () => {
-      modal.style.display = 'none';
-      memoryAudio.pause();
-      memoryAudio.currentTime = 0;
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (currentStage > 0) {
+        currentStage--;
+        renderStage(currentStage);
+      }
     });
 
-    memoryAudio.addEventListener('ended', () => {
-      modal.style.display = 'none';
-    });
+    renderStage(currentStage);
   </script>
 </body>
 </html>
