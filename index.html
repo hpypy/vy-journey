@@ -47,7 +47,7 @@
       left: 0;
       width: 60px;
       height: 60px;
-      background-image: url('https://i.imgur.com/LrhR3gb.png');
+      background-image: url('https://i.imgur.com/pPJemTN.png');
       background-size: cover;
       transition: transform 0.2s;
     }
@@ -155,26 +155,26 @@
       {
         position: '25%',
         image: 'https://i.imgur.com/LmAX6OH.png',
-        music: 'https://jmp.sh/s/11tJ6plERxfnHclMgmwa',
+        music: 'https://drive.google.com/uc?export=download&id=19iHTgdILghOfa2UybuK-epWrMK_IEGbu',
         message: 'Ngày 15/04/200X, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
       },
       {
         position: '45%',
         image: 'https://i.imgur.com/FTdLc70.png',
-        music: 'https://jmp.sh/s/iJWkTC4WixarQqoG8e9n',
-        message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
+        music: 'https://drive.google.com/uc?export=download&id=1n8ZEFk9pypBj_QUkTnU7c5q_GjLl6NN1',
+        message: 'Vy bé nhỏ tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
       },
       {
         position: '65%',
         image: 'https://i.imgur.com/RK4uZBs.png',
-        music: 'https://jmp.sh/qOKLkOmA',
+        music: 'https://drive.google.com/uc?export=download&id=1oN3CdmAxoEGxzWzE-0qO9u5wqoiaRdlO',
         message: 'Cô gái Hà Vy lớn lên, rực rỡ như ánh mặt trời. Em có giấc mơ, nụ cười, và trái tim làm anh say mê.'
       },
       {
         position: '85%',
         image: 'https://i.imgur.com/Wv3a0Lz.png',
-        music: 'https://jumpshare.com/s/dCanirhEIIl8HbszmHkx',
-        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Sinh nhật vui vẻ nhá nữ hoàng của anh '
+        music: 'https://drive.google.com/uc?export=download&id=1afMDeS7MQMsDYPLeth5bNf2Skk_a1WcU',
+        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
       }
     ];
 
@@ -198,6 +198,7 @@
           memoryImage.src = stage.image;
           memoryMessage.textContent = stage.message;
           memoryAudio.src = stage.music;
+          modal.style.display = 'flex';
           memoryAudio.play();
         }
       });
@@ -220,7 +221,6 @@
       memoryAudio.currentTime = 0;
     });
 
-    // Auto-close modal when stage is shown
     memoryAudio.addEventListener('ended', () => {
       modal.style.display = 'none';
     });
