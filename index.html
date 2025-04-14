@@ -126,21 +126,6 @@
       cursor: pointer;
       color: #333;
     }
-
-    .petal {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-image: url('https://i.imgur.com/LrhR3gb.png');
-      background-size: cover;
-      animation: fall 8s linear infinite;
-      z-index: 0;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-100vh); }
-      100% { transform: translateY(100vh); }
-    }
   </style>
 </head>
 <body>
@@ -170,26 +155,26 @@
       {
         position: '25%',
         image: 'https://i.imgur.com/LmAX6OH.png',
-        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        music: 'https://jmp.sh/s/11tJ6plERxfnHclMgmwa',
         message: 'Ngày 15/04/200X, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
       },
       {
         position: '45%',
         image: 'https://i.imgur.com/FTdLc70.png',
-        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-        message: 'Vy bé nhỏ tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
+        music: 'https://jmp.sh/s/iJWkTC4WixarQqoG8e9n',
+        message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
       },
       {
         position: '65%',
         image: 'https://i.imgur.com/RK4uZBs.png',
-        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+        music: 'https://jmp.sh/qOKLkOmA',
         message: 'Cô gái Hà Vy lớn lên, rực rỡ như ánh mặt trời. Em có giấc mơ, nụ cười, và trái tim làm anh say mê.'
       },
       {
         position: '85%',
         image: 'https://i.imgur.com/Wv3a0Lz.png',
-        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
+        music: 'https://jumpshare.com/s/dCanirhEIIl8HbszmHkx',
+        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Sinh nhật vui vẻ nhá nữ hoàng của anh '
       }
     ];
 
@@ -202,22 +187,25 @@
     const memoryAudio = document.getElementById('memory-audio');
     const closeModal = document.getElementById('close-modal');
 
+    function showStage(index) {
+      const stage = stages[index];
+      anime({
+        targets: character,
+        left: stage.position,
+        duration: 1000,
+        easing: 'easeInOutQuad',
+        complete: () => {
+          memoryImage.src = stage.image;
+          memoryMessage.textContent = stage.message;
+          memoryAudio.src = stage.music;
+          memoryAudio.play();
+        }
+      });
+    }
+
     moveBtn.addEventListener('click', () => {
       if (currentStage < stages.length) {
-        const stage = stages[currentStage];
-        anime({
-          targets: character,
-          left: stage.position,
-          duration: 1000,
-          easing: 'easeInOutQuad',
-          complete: () => {
-            memoryImage.src = stage.image;
-            memoryMessage.textContent = stage.message;
-            memoryAudio.src = stage.music;
-            modal.style.display = 'flex';
-            memoryAudio.play();
-          }
-        });
+        showStage(currentStage);
         currentStage++;
         if (currentStage === stages.length) {
           moveBtn.textContent = '🎉 Chúc Mừng Sinh Nhật Vy!';
@@ -232,14 +220,10 @@
       memoryAudio.currentTime = 0;
     });
 
-    // Petal fall effect
-    for (let i = 0; i < 15; i++) {
-      const petal = document.createElement('div');
-      petal.className = 'petal';
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDelay = Math.random() * 5 + 's';
-      document.body.appendChild(petal);
-    }
+    // Auto-close modal when stage is shown
+    memoryAudio.addEventListener('ended', () => {
+      modal.style.display = 'none';
+    });
   </script>
 </body>
 </html>
