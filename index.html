@@ -5,217 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hành Trình Của Vy</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
       background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
       font-family: 'Arial', sans-serif;
       overflow-x: hidden;
-    }
-
-
-    .app {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-      padding: 20px;
-      position: relative;
     }
-
     h1 {
       font-family: 'Dancing Script', cursive;
       font-size: 3em;
       color: #ff5e99;
-      margin-bottom: 30px;
-      animation: fadeInDown 1s ease forwards;
+      margin: 30px 0 10px;
     }
-
-    .stage-container {
+    .path {
       position: relative;
-      width: 100%;
+      width: 90vw;
       max-width: 600px;
+      height: 100px;
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      overflow: hidden;
-      animation: fadeInUp 1s ease forwards;
-    }
-
-    .character-area {
-      height: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 20px auto;
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      background: url('https://imgur.com/pPJemTN') center/cover no-repeat;
-      position: relative;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
     }
-
-    .character-area img {
-      height: 160px;
-      animation: float 3s ease-in-out infinite;
+    .stage-dot {
+      width: 20px;
+      height: 20px;
+      background-color: #ff69b4;
+      border-radius: 50%;
     }
-
-    .confetti {
+    .character {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
+      top: -40px;
+      left: 30px;
+      width: 60px;
+      height: 60px;
+      background-image: url('https://i.imgur.com/pPJemTN.png');
+      background-size: cover;
+      transition: left 1s ease;
     }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    @keyframes fadeInUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeInDown {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
     .dialogue {
-      padding: 20px;
+      max-width: 500px;
       text-align: center;
     }
-
-   .dialogue img {
-  max-width: 100%;
-  height: auto;
-  max-height: 250px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  transition: transform 0.4s ease;
-}
-
-
+    .dialogue img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
     .dialogue p {
-      font-size: 1.1em;
-      color: #333;
       font-family: 'Dancing Script', cursive;
+      font-size: 1.2em;
+      color: #333;
     }
-
     .controls {
-      margin-top: 20px;
       display: flex;
-      justify-content: center;
       gap: 20px;
+      margin: 20px 0;
     }
-
     .controls button {
       padding: 10px 20px;
-      font-size: 16px;
       border: none;
       border-radius: 8px;
       background-color: #ff69b4;
       color: white;
+      font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s;
+      transition: background 0.3s;
     }
-
     .controls button:hover {
       background-color: #ff3399;
-      transform: scale(1.05);
-    }
-
-    audio {
-      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <h1>Hành Trình Của Vy</h1>
-    <div class="stage-container">
-      <div class="character-area">
-        <img id="character-img" src="https://i.imgur.com/pPJemTN.png" alt="Vy chibi">
-        <canvas class="confetti" id="confetti-canvas"></canvas>
-      </div>
-      <div class="dialogue">
-        <img id="stage-img" src="" alt="Kỷ niệm">
-        <p id="stage-text"></p>
-        <audio id="stage-audio" controls></audio>
-      </div>
-    </div>
-    <div class="controls">
-      <button id="prev-btn">⬅️ Trước</button>
-      <button id="next-btn">Tiếp ➡️</button>
-    </div>
+  <h1>Hành Trình Của Vy</h1>
+  <div class="path">
+    <div class="character" id="character"></div>
+    <div class="stage-dot"></div>
+    <div class="stage-dot"></div>
+    <div class="stage-dot"></div>
+    <div class="stage-dot"></div>
+  </div>
+  <div class="dialogue">
+    <img id="stage-img" src="" alt="">
+    <p id="stage-msg"></p>
+    <audio id="stage-audio" controls></audio>
+  </div>
+  <div class="controls">
+    <button id="prev-btn">⬅️ Trước</button>
+    <button id="next-btn">Tiếp ➡️</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
-   const stages = [
-  {
-    image: 'https://i.imgur.com/LmAX6OH.png',
-    music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/NoiAyConTimVe-HoQuangHieu.mp3',
-    message: 'Ngày 15/04/2000, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
-  },
-  {
-    image: 'https://i.imgur.com/FTdLc70.png',
-    music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/niem-tin-chien-thang-my-tam.mp3',
-    message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
-  },
-  {
-    image: 'https://i.imgur.com/RK4uZBs.png',
-    music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/den-ft-linh-cao-dua-nhau-di-tron.mp3',
-    message: 'Khuyết điểm của bé nhiều như sao trên trời ý, nhưng nụ cười của bé thì như mặt trời. Vì khi mặt trời xuất hiện cũng là lúc những ngôi sao biến mất'
-  },
-  {
-    image: 'https://i.imgur.com/Wv3a0Lz.png',
-    music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan.mp3',
-    message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
-  }
-];
-
+    const stages = [
+      {
+        image: 'https://i.imgur.com/LmAX6OH.png',
+        music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/NoiAyConTimVe-HoQuangHieu.mp3',
+        message: 'Ngày 15/04/2000, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.',
+        position: '30px'
+      },
+      {
+        image: 'https://i.imgur.com/FTdLc70.png',
+        music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/niem-tin-chien-thang-my-tam.mp3',
+        message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.',
+        position: '170px'
+      },
+      {
+        image: 'https://i.imgur.com/RK4uZBs.png',
+        music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/den-ft-linh-cao-dua-nhau-di-tron.mp3',
+        message: 'Khuyết điểm của bé nhiều như sao trên trời ý, nhưng nụ cười của bé thì như mặt trời. Vì khi mặt trời xuất hiện cũng là lúc những ngôi sao biến mất',
+        position: '310px'
+      },
+      {
+        image: 'https://i.imgur.com/Wv3a0Lz.png',
+        music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan.mp3',
+        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.',
+        position: '450px'
+      }
+    ];
 
     let currentStage = 0;
-    const stageImg = document.getElementById('stage-img');
-    const stageText = document.getElementById('stage-text');
-    const stageAudio = document.getElementById('stage-audio');
-    const confettiCanvas = document.getElementById('confetti-canvas');
+    const character = document.getElementById('character');
+    const img = document.getElementById('stage-img');
+    const msg = document.getElementById('stage-msg');
+    const audio = document.getElementById('stage-audio');
 
     function renderStage(index) {
       const stage = stages[index];
-      stageImg.src = stage.image;
-      stageText.textContent = '';
-      stageAudio.src = stage.music;
-      stageAudio.play();
-      typeEffect(stage.message);
-      if (index === stages.length - 1) {
-        confetti({
-          particleCount: 150,
-          spread: 100,
-          origin: { y: 0.6 },
-          ticks: 200,
-          scalar: 1.2,
-          disableForReducedMotion: true,
-        });
-      }
-    }
-
-    function typeEffect(text) {
-      let i = 0;
-      const speed = 40;
-      stageText.innerHTML = '';
-      function type() {
-        if (i < text.length) {
-          stageText.innerHTML += text.charAt(i);
-          i++;
-          setTimeout(type, speed);
-        }
-      }
-      type();
+      character.style.left = stage.position;
+      img.src = stage.image;
+      msg.textContent = stage.message;
+      audio.src = stage.music;
+      audio.play();
     }
 
     document.getElementById('next-btn').addEventListener('click', () => {
