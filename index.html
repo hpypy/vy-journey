@@ -37,7 +37,7 @@
       margin: 20px auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-around;
       padding: 0 30px;
     }
     .stage-dot {
@@ -49,7 +49,7 @@
     .character {
       position: absolute;
       top: -40px;
-      left: 30px;
+      transform: translateX(-50%);
       width: 50px;
       height: 50px;
       background-image: url('https://i.imgur.com/pPJemTN.png');
@@ -72,6 +72,7 @@
       font-family: 'Dancing Script', cursive;
       font-size: 1.2em;
       color: #333;
+      white-space: pre-line;
     }
     .controls {
       display: flex;
@@ -111,10 +112,10 @@
   <h1>Hành Trình Của Vy</h1>
   <div class="path">
     <div class="character" id="character"></div>
-    <div class="stage-dot"></div>
-    <div class="stage-dot"></div>
-    <div class="stage-dot"></div>
-    <div class="stage-dot"></div>
+    <div class="stage-dot" data-position="25%"></div>
+    <div class="stage-dot" data-position="45%"></div>
+    <div class="stage-dot" data-position="65%"></div>
+    <div class="stage-dot" data-position="85%"></div>
   </div>
   <div class="dialogue">
     <img id="stage-img" src="" alt="">
@@ -132,25 +133,25 @@
         image: 'https://i.imgur.com/LmAX6OH.png',
         music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/NoiAyConTimVe-HoQuangHieu.mp3',
         message: 'Ngày 15/04/2000, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.',
-        position: '30px'
+        position: '25%'
       },
       {
         image: 'https://i.imgur.com/FTdLc70.png',
         music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/niem-tin-chien-thang-my-tam.mp3',
         message: 'Vy xíu xíu tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.',
-        position: '170px'
+        position: '45%'
       },
       {
         image: 'https://i.imgur.com/RK4uZBs.png',
         music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/den-ft-linh-cao-dua-nhau-di-tron.mp3',
         message: 'Khuyết điểm của bé nhiều như sao trên trời ý, nhưng nụ cười của bé thì như mặt trời. Vì khi mặt trời xuất hiện cũng là lúc những ngôi sao biến mất',
-        position: '310px'
+        position: '65%'
       },
       {
         image: 'https://i.imgur.com/Wv3a0Lz.png',
         music: 'https://raw.githubusercontent.com/hpypy/vy-journey/main/nhac-chuong-noi-tinh-yeu-bat-dau-bui-anh-tuan.mp3',
         message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.',
-        position: '450px'
+        position: '85%'
       }
     ];
 
@@ -159,15 +160,41 @@
     const img = document.getElementById('stage-img');
     const msg = document.getElementById('stage-msg');
     const audio = document.getElementById('stage-audio');
+    const nextBtn = document.getElementById('next-btn');
+
+    function typeEffect(element, text, callback) {
+      let i = 0;
+      element.innerHTML = '';
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, 40);
+        } else if (callback) {
+          callback();
+        }
+      }
+      type();
+    }
 
     function renderStage(index) {
       const stage = stages[index];
       character.style.left = stage.position;
       img.src = stage.image;
-      msg.innerText = stage.message;
-      msg.style.fontFamily = 'Dancing Script', 'cursive';
       audio.src = stage.music;
       audio.play();
+      typeEffect(msg, stage.message, () => {
+        if (index === stages.length - 1) {
+          const extra = document.createElement('p');
+          extra.textContent = '🎂 Happy Birthday My Queen 🎉';
+          extra.style.fontFamily = 'Dancing Script';
+          extra.style.fontSize = '1.5em';
+          extra.style.color = '#e91e63';
+          extra.style.marginTop = '20px';
+          msg.appendChild(extra);
+          nextBtn.style.display = 'none';
+        }
+      });
     }
 
     document.getElementById('next-btn').addEventListener('click', () => {
@@ -180,6 +207,7 @@
     document.getElementById('prev-btn').addEventListener('click', () => {
       if (currentStage > 0) {
         currentStage--;
+        nextBtn.style.display = 'inline-block';
         renderStage(currentStage);
       }
     });
