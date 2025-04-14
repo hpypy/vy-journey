@@ -1,33 +1,245 @@
-        <footer class="page-footer font-small pt-4">
-            <div class="container">
-               <?php the_field("footer_content","option");?>
-            </div>
-            <div class="footer-copyright text-center py-3">Copyright © 2024 CakeoTV All rights reserved.</div>
-        </footer><!--]-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hành Trình Của Vy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(to bottom, #ffe6f0, #fff);
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.8em;
+      color: #ff6699;
+      margin: 20px 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .path {
+      position: relative;
+      width: 80vw;
+      max-width: 600px;
+      height: 80px;
+      background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+      border: 2px solid #ff99cc;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+
+    .character {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 60px;
+      height: 60px;
+      background-image: url('https://i.imgur.com/LrhR3gb.png');
+      background-size: cover;
+      transition: transform 0.2s;
+    }
+
+    .stage {
+      position: absolute;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      background-color: #ff6699;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+
+    .stage[data-stage="1"] { left: 25%; }
+    .stage[data-stage="2"] { left: 45%; }
+    .stage[data-stage="3"] { left: 65%; }
+    .stage[data-stage="4"] { left: 85%; }
+
+    #move-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ff6699;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #move-btn:hover {
+      background-color: #ff3366;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    #memory-message {
+      font-family: 'Dancing Script', cursive;
+      color: #333;
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-image: url('https://i.imgur.com/LrhR3gb.png');
+      background-size: cover;
+      animation: fall 8s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh); }
+      100% { transform: translateY(100vh); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hành Trình Của Vy</h1>
+    <div class="path">
+      <div id="character" class="character"></div>
+      <div class="stage" data-stage="1"></div>
+      <div class="stage" data-stage="2"></div>
+      <div class="stage" data-stage="3"></div>
+      <div class="stage" data-stage="4"></div>
     </div>
-    <div id="teleports"></div>
-	<div class="float_bottom">
-<?php while( have_rows("banner_bottom","option") ): the_row();?>
-	<a href="<?php the_sub_field("link");?>"><img src="<?php the_sub_field("img");?>"></a>
-<?php endwhile;?>
-	</div>
-	<?php wp_footer();?>
+    <button id="move-btn">Bước Tiếp Theo</button>
+  </div>
 
-<script>
-jQuery(document).ready(function($) {
-    $('.button-toggle').click(function() {
-        $('.nav_menu').toggleClass('active');
-        $('body').append('<div class="overlay"></div>');
+  <div id="memory-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <img id="memory-image" src="" alt="Kỷ niệm">
+      <p id="memory-message"></p>
+      <audio id="memory-audio" controls></audio>
+    </div>
+  </div>
+
+  <script>
+    const stages = [
+      {
+        position: '25%',
+        image: 'https://i.imgur.com/LmAX6OH.png',
+        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        message: 'Ngày 15/04/200X, một ngôi sao nhỏ tên Hà Vy ra đời. Cảm ơn mẹ Tuyến đã mang em đến, để một ngày anh được gặp em.'
+      },
+      {
+        position: '45%',
+        image: 'https://i.imgur.com/FTdLc70.png',
+        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+        message: 'Vy bé nhỏ tung tăng khám phá thế giới, với nụ cười làm sáng cả bầu trời. Mỗi bước chân em đều dẫn gần hơn đến anh.'
+      },
+      {
+        position: '65%',
+        image: 'https://i.imgur.com/RK4uZBs.png',
+        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+        message: 'Cô gái Hà Vy lớn lên, rực rỡ như ánh mặt trời. Em có giấc mơ, nụ cười, và trái tim làm anh say mê.'
+      },
+      {
+        position: '85%',
+        image: 'https://i.imgur.com/Wv3a0Lz.png',
+        music: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+        message: 'Sinh nhật em, và cũng là ngày anh cảm ơn vì được gặp em. Vy ơi, anh yêu em, mãi mãi.'
+      }
+    ];
+
+    let currentStage = 0;
+    const character = document.getElementById('character');
+    const moveBtn = document.getElementById('move-btn');
+    const modal = document.getElementById('memory-modal');
+    const memoryImage = document.getElementById('memory-image');
+    const memoryMessage = document.getElementById('memory-message');
+    const memoryAudio = document.getElementById('memory-audio');
+    const closeModal = document.getElementById('close-modal');
+
+    moveBtn.addEventListener('click', () => {
+      if (currentStage < stages.length) {
+        const stage = stages[currentStage];
+        anime({
+          targets: character,
+          left: stage.position,
+          duration: 1000,
+          easing: 'easeInOutQuad',
+          complete: () => {
+            memoryImage.src = stage.image;
+            memoryMessage.textContent = stage.message;
+            memoryAudio.src = stage.music;
+            modal.style.display = 'flex';
+            memoryAudio.play();
+          }
+        });
+        currentStage++;
+        if (currentStage === stages.length) {
+          moveBtn.textContent = '🎉 Chúc Mừng Sinh Nhật Vy!';
+          moveBtn.disabled = true;
+        }
+      }
     });
-    
-    $(document).on('click', '.overlay', function() {
-        $('.nav_menu').removeClass('active');
-        $('.overlay').remove();
+
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+      memoryAudio.pause();
+      memoryAudio.currentTime = 0;
     });
-});
-</script>
 
-
+    // Petal fall effect
+    for (let i = 0; i < 15; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(petal);
+    }
+  </script>
 </body>
-
 </html>
